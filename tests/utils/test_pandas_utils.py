@@ -5,6 +5,7 @@ import pandas as pd
 
 from catalyst.testing import parameter_space, ZiplineTestCase
 from catalyst.testing.predicates import assert_equal
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.pandas_utils import (
     categorical_df_concat,
     nearest_unequal_elements
@@ -16,9 +17,10 @@ class TestNearestUnequalElements(ZiplineTestCase):
     @parameter_space(tz=['UTC', 'US/Eastern'], __fail_fast=True)
     def test_nearest_unequal_elements(self, tz):
 
-        dts = pd.to_datetime(
-            ['2014-01-01', '2014-01-05', '2014-01-06', '2014-01-09'],
-        ).tz_localize(tz)
+        dts = safe_tz_localize(
+            pd.to_datetime(['2014-01-01', '2014-01-05', '2014-01-06', '2014-01-09']),
+            tz
+        )
 
         def t(s):
             return None if s is None else pd.Timestamp(s, tz=tz)
@@ -44,7 +46,7 @@ class TestNearestUnequalElements(ZiplineTestCase):
     def test_nearest_unequal_elements_short_dts(self, tz):
 
         # Length 1.
-        dts = pd.to_datetime(['2014-01-01']).tz_localize(tz)
+        dts = safe_tz_localize(pd.to_datetime(['2014-01-01']), tz)
 
         def t(s):
             return None if s is None else pd.Timestamp(s, tz=tz)
@@ -57,7 +59,7 @@ class TestNearestUnequalElements(ZiplineTestCase):
             self.assertEqual(computed, expected)
 
         # Length 0
-        dts = pd.to_datetime([]).tz_localize(tz)
+        dts = safe_tz_localize(pd.to_datetime([]), tz)
         for dt, before, after in (('2013-12-31', None, None),
                                   ('2014-01-01', None, None),
                                   ('2014-01-02', None, None)):

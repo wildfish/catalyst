@@ -24,6 +24,7 @@ from six.moves.urllib_error import HTTPError
 
 from catalyst.constants import LOG_LEVEL
 from catalyst.utils.calendars import get_calendar
+from catalyst.utils.date_utils import safe_tz_localize
 from . import treasuries, treasuries_can
 from .benchmarks import get_benchmark_returns
 from ..utils.deprecate import deprecated
@@ -496,8 +497,7 @@ def _load_cached_data(filename, first_date, last_date, now, resource_name,
             data = pd.DataFrame.from_csv(path)
             if data.empty:
                 raise ValueError("File is empty.")
-            data.index = pd.to_datetime(data.index, infer_datetime_format=True,
-                                        errors='coerce').tz_localize('UTC')
+            data.index = safe_tz_localize(pd.to_datetime(data.index, infer_datetime_format=True, errors='coerce'), 'UTC')
             if has_data_for_dates(data, first_date, last_date):
                 return data
 
@@ -614,7 +614,7 @@ def load_from_yahoo(indexes=None,
     else:
         close_key = 'Close'
     df = pd.DataFrame({key: d[close_key] for key, d in iteritems(data)})
-    df.index = df.index.tz_localize(pytz.utc)
+    df.index = safe_tz_localize(df.index, pytz.utc)
     return df
 
 
@@ -659,7 +659,7 @@ def load_bars_from_yahoo(indexes=None,
     panel = pd.Panel(data)
     # Rename columns
     panel.minor_axis = ['open', 'high', 'low', 'close', 'volume', 'price']
-    panel.major_axis = panel.major_axis.tz_localize(pytz.utc)
+    panel.major_axis = safe_tz_localize(panel.major_axis, pytz.utc)
     # Adjust data
     if adjusted:
         adj_cols = ['open', 'high', 'low', 'close']

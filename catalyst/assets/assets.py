@@ -51,6 +51,7 @@ from catalyst.errors import (
     SidsNotFound,
     SymbolNotFound,
 )
+from catalyst.utils.date_utils import safe_tz_localize
 from . import (
     Asset, Equity, Future,
 )
@@ -126,7 +127,7 @@ def merge_ownership_periods(mappings):
                     # concat with a fake ownership object to make the last
                     # end date be max timestamp
                     [OwnershipPeriod(
-                        pd.Timestamp.max.tz_localize('utc'),
+                        safe_tz_localize(pd.Timestamp.max, 'utc'),
                         None,
                         None,
                         None,

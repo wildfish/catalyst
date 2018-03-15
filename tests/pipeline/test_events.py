@@ -30,6 +30,7 @@ from catalyst.testing.fixtures import (
     WithTradingSessions,
 )
 from catalyst.testing.predicates import assert_equal
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.numpy_utils import (
     categorical_dtype,
     datetime64ns_dtype,
@@ -594,9 +595,9 @@ class EventLoaderUtilsTestCase(ZiplineTestCase):
     boundary_dates = [pd.Timestamp('2013-01-04 8:44:59'),
                       pd.Timestamp('2013-01-04 8:45:00'),
                       pd.Timestamp('2013-01-04 8:46:00')]
-    us_boundary_dates = [date.tz_localize('US/Eastern') for date in
+    us_boundary_dates = [safe_tz_localize(date, 'US/Eastern') for date in
                          boundary_dates]
-    moscow_boundary_dates = [date.tz_localize('Europe/Moscow') for date in
+    moscow_boundary_dates = [safe_tz_localize(date, 'Europe/Moscow') for date in
                              boundary_dates]
     mixed_tz_dates = [pd.Timestamp('2013-12-30'),
                       pd.Timestamp('2013-01-24'),

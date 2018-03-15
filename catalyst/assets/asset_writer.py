@@ -35,6 +35,7 @@ from catalyst.assets.asset_db_schema import (
     metadata,
     version_info,
 )
+from catalyst.utils.date_utils import safe_tz_localize
 
 from catalyst.utils.preprocess import preprocess
 from catalyst.utils.range import from_tuple, intersecting_ranges
@@ -287,10 +288,7 @@ def _dt_to_epoch_ns(dt_series):
         The index converted to nanoseconds since the epoch.
     """
     index = pd.to_datetime(dt_series.values)
-    if index.tzinfo is None:
-        index = index.tz_localize('UTC')
-    else:
-        index = index.tz_convert('UTC')
+    index = safe_tz_localize(index, 'UTC')
     return index.view(np.int64)
 
 

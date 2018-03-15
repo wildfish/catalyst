@@ -96,6 +96,7 @@ from catalyst.utils.api_support import (
     require_not_initialized,
     ZiplineAPI,
     disallowed_in_before_trading_start)
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.input_validation import (
     coerce_string,
     ensure_upper_case,
@@ -656,7 +657,7 @@ class TradingAlgorithm(object):
             if isinstance(data, pd.Panel):
                 # Guard against tz-naive index.
                 if data.major_axis.tz is None:
-                    data.major_axis = data.major_axis.tz_localize('UTC')
+                    data.major_axis = safe_tz_localize(data.major_axis, 'UTC')
 
                 # For compatibility with existing examples allow start/end
                 # to be inferred.

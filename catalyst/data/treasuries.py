@@ -18,6 +18,7 @@ import re
 import numpy as np
 import pandas as pd
 
+from catalyst.utils.date_utils import safe_tz_localize
 
 get_unit_and_periods = itemgetter('unit', 'periods')
 
@@ -59,7 +60,7 @@ def earliest_possible_date():
 
 
 def get_treasury_data(start_date, end_date):
-    return pd.read_csv(
+    data = pd.read_csv(
         "https://www.federalreserve.gov/datadownload/Output.aspx"
         "?rel=H15"
         "&series=bf17364827e38702b42a58cf8eaa3f78"
@@ -80,7 +81,8 @@ def get_treasury_data(start_date, end_date):
         how='all'
     ).rename(
         columns=parse_treasury_csv_column
-    ).tz_localize('UTC') * 0.01  # Convert from 2.57% to 0.0257.
+    )
+    return safe_tz_localize(data, 'UTC') * 0.01  # Convert from 2.57% to 0.0257.
 
 
 def dataconverter(s):

@@ -27,6 +27,7 @@ from catalyst.exchange.utils.datetime_utils import get_delta, get_start_dt, \
 from catalyst.exchange.utils.exchange_utils import get_exchange_folder, \
     save_exchange_symbols, mixin_market_params, get_catalyst_symbol
 from catalyst.utils.cli import maybe_show_progress
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.paths import ensure_directory
 from logbook import Logger
 from pytz import UTC
@@ -693,7 +694,7 @@ class ExchangeBundle:
         symbols = df['symbol'].unique()
 
         # Apply the timezone before creating an index for simplicity
-        df['last_traded'] = df['last_traded'].dt.tz_localize(pytz.UTC)
+        df['last_traded'] = safe_tz_localize(df['last_traded'].dt, pytz.UTC)
         df.set_index(['symbol', 'last_traded'], drop=True, inplace=True)
 
         assets = dict()

@@ -17,6 +17,8 @@ import pandas as pd
 
 import pandas_datareader.data as pd_reader
 
+from catalyst.utils.date_utils import safe_tz_localize
+
 
 def get_benchmark_returns(symbol, first_date, last_date):
     """
@@ -61,4 +63,4 @@ def get_benchmark_returns(symbol, first_date, last_date):
 
     data = data.fillna(method='ffill')
 
-    return data.sort_index().tz_localize('UTC').pct_change(1).iloc[1:]
+    return safe_tz_localize(data.sort_index(), 'UTC').pct_change(1).iloc[1:]

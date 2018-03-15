@@ -40,6 +40,7 @@ from catalyst.testing import (
 )
 from catalyst.testing.fixtures import WithAssetFinder
 from catalyst.testing.predicates import assert_equal, assert_isidentical
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.numpy_utils import float64_dtype, int64_dtype
 
 
@@ -71,7 +72,7 @@ def _utc_localize_index_level_0(df):
     """
     idx = df.index
     df.index = pd.MultiIndex.from_product(
-        (idx.levels[0].tz_localize('utc'), idx.levels[1]),
+        (safe_tz_localize(idx.levels[0], 'utc'), idx.levels[1]),
         names=idx.names,
     )
     return df
@@ -818,10 +819,10 @@ class BlazeToPipelineTestCase(WithAssetFinder, ZiplineTestCase):
 
     def test_custom_query_time_tz(self):
         df = self.df.copy()
-        df['timestamp'] = (
+        df['timestamp'] = safe_tz_localize((
             pd.DatetimeIndex(df['timestamp'], tz='EST') +
             timedelta(hours=8, minutes=44)
-        ).tz_convert('utc').tz_localize(None)
+        ), 'utc').tz_localize(None)
         df.ix[3:5, 'timestamp'] = pd.Timestamp('2014-01-01 13:45')
         expr = bz.data(df, name='expr', dshape=self.dshape)
         loader = BlazeLoader(data_query_time=time(8, 45), data_query_tz='EST')
@@ -844,9 +845,9 @@ class BlazeToPipelineTestCase(WithAssetFinder, ZiplineTestCase):
         ).run_pipeline(p, dates[0], dates[-1])
 
         expected = df.drop('asof_date', axis=1)
-        expected['timestamp'] = expected['timestamp'].dt.normalize().astype(
+        expected['timestamp'] = safe_tz_localize(expected['timestamp'].dt.normalize().astype(
             'datetime64[ns]',
-        ).dt.tz_localize('utc')
+        ).dt, 'utc')
         expected.ix[3:5, 'timestamp'] += timedelta(days=1)
         expected.set_index(['timestamp', 'sid'], inplace=True)
         expected.index = pd.MultiIndex.from_product((

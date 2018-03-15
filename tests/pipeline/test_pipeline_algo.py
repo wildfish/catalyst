@@ -63,6 +63,7 @@ from catalyst.testing.fixtures import (
 )
 from catalyst.utils.calendars import get_calendar
 from catalyst.utils.compat import normalize_date
+from catalyst.utils.date_utils import safe_tz_localize
 
 TEST_RESOURCE_PATH = join(
     dirname(dirname(realpath(__file__))),  # catalyst_repo/tests
@@ -415,7 +416,7 @@ class PipelineAlgorithmTestCase(WithBcolzEquityDailyBarReaderFromCSVs,
             cls.adjustment_reader,
             USEquityPricing,
         )
-        cls.dates = cls.raw_data[cls.AAPL].index.tz_localize('UTC')
+        cls.dates = safe_tz_localize(cls.raw_data[cls.AAPL].index, 'UTC')
         cls.AAPL_split_date = Timestamp("2014-06-09", tz='UTC')
         cls.assets = cls.asset_finder.retrieve_all(
             cls.ASSET_FINDER_EQUITY_SIDS

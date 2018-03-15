@@ -9,6 +9,7 @@ from toolz import flip
 import pandas as pd
 import responses
 
+from catalyst.utils.date_utils import safe_tz_localize
 from .core import (
     create_daily_bar_data,
     create_minute_bar_data,
@@ -504,12 +505,12 @@ class WithTradingEnvironment(WithAssetFinder,
             filename = get_benchmark_filename(symbol)
             source_path = os.path.join(cls.MARKET_DATA_DIR, filename)
             benchmark_returns = \
-                pd.Series.from_csv(source_path).tz_localize('UTC')
+                safe_tz_localize(pd.Series.from_csv(source_path), 'UTC')
 
             filename = INDEX_MAPPING[symbol][1]
             source_path = os.path.join(cls.MARKET_DATA_DIR, filename)
             treasury_curves = \
-                pd.DataFrame.from_csv(source_path).tz_localize('UTC')
+                safe_tz_localize(pd.DataFrame.from_csv(source_path), 'UTC')
 
             # The TradingEnvironment ordinarily uses cached benchmark returns
             # and treasury curves data, but when running the catalyst tests

@@ -44,6 +44,7 @@ from catalyst.testing.fixtures import (
 )
 from catalyst.testing.predicates import assert_equal, assert_raises_regex
 from catalyst.testing.predicates import assert_frame_equal
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.numpy_utils import datetime64ns_dtype
 from catalyst.utils.numpy_utils import float64_dtype
 
@@ -104,8 +105,8 @@ def create_expected_df_for_factor_compute(start_date,
     )
     # Index name is lost during reindex.
     df.index = df.index.rename('knowledge_date')
-    df['at_date'] = end_date.tz_localize('utc')
-    df = df.set_index(['at_date', df.index.tz_localize('utc')]).ffill()
+    df['at_date'] = safe_tz_localize(end_date, 'utc')
+    df = df.set_index(['at_date', safe_tz_localize(df.index, 'utc')]).ffill()
     new_sids = set(sids) - set(df.columns)
     df = df.reindex(columns=df.columns.union(new_sids))
     return df

@@ -18,6 +18,8 @@ import six
 from toolz import curry
 from toolz.curried.operator import add as prepend
 
+from catalyst.utils.date_utils import safe_tz_localize
+
 COLUMN_NAMES = {
     "V39063": '1month',
     "V39065": '3month',
@@ -68,16 +70,15 @@ def load_frame(url, skiprows):
     """
     Load a DataFrame of data from a Bank of Canada site.
     """
-    return pd.read_csv(
+    data = pd.read_csv(
         url,
         skiprows=skiprows,
         skipinitialspace=True,
         na_values=["Bank holiday", "Not available"],
         parse_dates=["Date"],
         index_col="Date",
-    ).dropna(how='all') \
-     .tz_localize('UTC') \
-     .rename(columns=COLUMN_NAMES)
+    ).dropna(how='all')
+    return safe_tz_localize(data, 'UTC').rename(columns=COLUMN_NAMES)
 
 
 def check_known_inconsistencies(bill_data, bond_data):

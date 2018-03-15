@@ -37,6 +37,7 @@ from functools import partial
 #     category=ZiplineDeprecationWarning,
 #     stacklevel=1,
 # )
+from catalyst.utils.date_utils import safe_tz_localize
 
 start = pd.Timestamp('1990-01-01', tz='UTC')
 end_base = pd.Timestamp('today', tz='UTC')
@@ -272,9 +273,9 @@ trading_day = pd.tseries.offsets.CDay(holidays=non_trading_days)
 
 
 def get_trading_days(start, end, trading_day=trading_day):
-    return pd.date_range(start=start.date(),
-                         end=end.date(),
-                         freq=trading_day).tz_localize('UTC')
+    return safe_tz_localize(pd.date_range(start=start.date(),
+                                          end=end.date(),
+                                          freq=trading_day), 'UTC')
 
 
 trading_days = get_trading_days(start, end)

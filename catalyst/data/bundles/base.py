@@ -21,6 +21,7 @@ from abc import abstractmethod, abstractproperty
 import logbook
 import pandas as pd
 
+from catalyst.utils.date_utils import safe_tz_localize
 from . import core as bundles
 
 from catalyst.utils.cli import (
@@ -413,7 +414,7 @@ class BaseBundle(object):
         # otherwise use the provided `start_session`.
         last = start_session
         if raw_data is not None and len(raw_data) > 0:
-            last = raw_data.index[-1].tz_localize('UTC')
+            last = safe_tz_localize(raw_data.index[-1], 'UTC')
 
         should_sleep = False
 

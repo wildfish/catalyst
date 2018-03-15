@@ -28,6 +28,7 @@ from catalyst.data._resample import (
 from catalyst.data.bar_reader import NoDataOnDate
 from catalyst.data.minute_bars import MinuteBarReader
 from catalyst.data.session_bars import SessionBarReader
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.memoize import lazyval
 
 _MINUTE_TO_SESSION_OHCLV_HOW = OrderedDict((
@@ -156,10 +157,7 @@ class DailyHistoryAggregator(object):
             cache = self._caches[field] = (session, market_open, {})
 
         _, market_open, entries = cache
-        try:
-            market_open = market_open.tz_localize('UTC')
-        except TypeError:
-            market_open = market_open.tz_convert('UTC')
+        market_open = safe_tz_localize(market_open, 'UTC')
         if dt != market_open:
             prev_dt = dt_value - self._one_min
         else:

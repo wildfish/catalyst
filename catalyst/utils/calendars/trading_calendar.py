@@ -33,6 +33,7 @@ from catalyst.utils.calendars._calendar_helpers import (
     is_open,
     minutes_to_session_labels,
 )
+from catalyst.utils.date_utils import safe_tz_localize
 from catalyst.utils.input_validation import (
     attrgetter,
     coerce,
@@ -644,21 +645,21 @@ class TradingCalendar(with_metaclass(ABCMeta)):
         # 0.16.1 does not appear to support this:
         # http://pandas.pydata.org/pandas-docs/stable/whatsnew.html#datetime-with-tz  # noqa
         return (
-            sched.at[session_label, 'market_open'].tz_localize('UTC'),
-            sched.at[session_label, 'market_close'].tz_localize('UTC'),
+            safe_tz_localize(sched.at[session_label, 'market_open'], 'UTC'),
+            safe_tz_localize(sched.at[session_label, 'market_close'], 'UTC'),
         )
 
     def session_open(self, session_label):
-        return self.schedule.at[
+        return safe_tz_localize(self.schedule.at[
             session_label,
             'market_open'
-        ].tz_localize('UTC')
+        ], 'UTC')
 
     def session_close(self, session_label):
-        return self.schedule.at[
+        return safe_tz_localize(self.schedule.at[
             session_label,
             'market_close'
-        ].tz_localize('UTC')
+        ], 'UTC')
 
     def session_opens_in_range(self, start_session_label, end_session_label):
         return self.schedule.loc[
@@ -727,7 +728,7 @@ class TradingCalendar(with_metaclass(ABCMeta)):
 
             idx += size_int
 
-        return DatetimeIndex(all_minutes).tz_localize("UTC")
+        return safe_tz_localize(DatetimeIndex(all_minutes), "UTC")
 
     @lazyval
     def all_minutes(self):
@@ -892,7 +893,7 @@ def days_at_time(days, t, tz, day_offset=0):
         minutes=t.minute,
         seconds=t.second,
     )
-    return (days + delta).tz_localize(tz).tz_convert('UTC')
+    return safe_tz_localize((days + delta), tz).tz_convert('UTC')
 
 
 def holidays_at_time(calendar, start, end, time, tz):
