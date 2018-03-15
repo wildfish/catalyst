@@ -32,6 +32,7 @@ from catalyst.data.loader import (  # For backwards compatibility
     load_bars_from_yahoo,
 )
 from catalyst.utils.calendars import get_calendar
+from catalyst.utils.compat import normalize_date
 from catalyst.utils.input_validation import expect_types
 
 __all__ = ['load_from_yahoo', 'load_bars_from_yahoo']
@@ -117,9 +118,9 @@ def create_dividend(sid, payment, declared_date, ex_date, pay_date):
         'net_amount': payment,
         'payment_sid': None,
         'ratio': None,
-        'declared_date': pd.tslib.normalize_date(declared_date),
-        'ex_date': pd.tslib.normalize_date(ex_date),
-        'pay_date': pd.tslib.normalize_date(pay_date),
+        'declared_date': normalize_date(declared_date),
+        'ex_date': normalize_date(ex_date),
+        'pay_date': normalize_date(pay_date),
         'type': DATASOURCE_TYPE.DIVIDEND,
         'source_id': 'MockDividendSource'
     })
@@ -134,9 +135,9 @@ def create_stock_dividend(sid, payment_sid, ratio, declared_date,
         'ratio': ratio,
         'net_amount': None,
         'gross_amount': None,
-        'dt': pd.tslib.normalize_date(declared_date),
-        'ex_date': pd.tslib.normalize_date(ex_date),
-        'pay_date': pd.tslib.normalize_date(pay_date),
+        'dt': normalize_date(declared_date),
+        'ex_date': normalize_date(ex_date),
+        'pay_date': normalize_date(pay_date),
         'type': DATASOURCE_TYPE.DIVIDEND,
         'source_id': 'MockDividendSource'
     })

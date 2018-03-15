@@ -31,6 +31,7 @@ from functools import partial
 
 from catalyst.finance.trading import TradingEnvironment
 from catalyst.utils.calendars import get_calendar
+from catalyst.utils.compat import normalize_date
 from catalyst.utils.factory import create_simulation_parameters
 from catalyst.data.loader import load_crypto_market_data
 import catalyst.utils.paths as pth
@@ -263,8 +264,8 @@ def _run(handle_data,
         # We still need to support bundles for other misc data, but we
         # can handle this later.
 
-        if start != pd.tslib.normalize_date(start) or \
-                        end != pd.tslib.normalize_date(end):
+        if start != normalize_date(start) or \
+                        end != normalize_date(end):
             # todo: add to Sim_Params the option to start & end at specific times 
             log.warn(
                 "Catalyst currently starts and ends on the start and "
