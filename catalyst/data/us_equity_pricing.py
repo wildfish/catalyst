@@ -49,7 +49,6 @@ from pandas import (
     to_datetime,
     Timestamp,
 )
-from pandas.tslib import iNaT
 from six import (
     iteritems,
     string_types,
@@ -63,6 +62,7 @@ from catalyst.data.bar_reader import (
     NoDataBeforeDate,
     NoDataOnDate,
 )
+from catalyst.utils.numpy_utils import iNaT
 from catalyst.utils.calendars import get_calendar
 from catalyst.utils.functional import apply
 from catalyst.utils.preprocess import call
