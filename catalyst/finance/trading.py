@@ -16,7 +16,6 @@ from functools import partial
 
 import logbook
 import pandas as pd
-from pandas.tslib import normalize_date
 from six import string_types
 from sqlalchemy import create_engine
 
@@ -24,6 +23,7 @@ from catalyst.assets import AssetDBWriter, AssetFinder
 from catalyst.assets.continuous_futures import CHAIN_PREDICATES
 from catalyst.data.loader import load_market_data
 from catalyst.utils.calendars import get_calendar
+from catalyst.utils.compat import normalize_date
 from catalyst.utils.memoize import remember_last
 
 from catalyst.constants import LOG_LEVEL

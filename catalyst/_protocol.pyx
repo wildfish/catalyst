@@ -16,7 +16,6 @@ import warnings
 from contextlib import contextmanager
 from functools import wraps
 
-from pandas.tslib import normalize_date
 import pandas as pd
 import numpy as np
 
@@ -30,6 +29,7 @@ from catalyst.assets import (Asset,
                             Future)
 from catalyst.assets.continuous_futures import ContinuousFuture
 from catalyst.catalyst_warnings import ZiplineDeprecationWarning
+from catalyst.utils.compat import normalize_date
 
 
 cdef bool _is_iterable(obj):

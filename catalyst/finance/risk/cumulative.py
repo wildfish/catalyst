@@ -18,7 +18,6 @@ import logbook
 import numpy as np
 
 import pandas as pd
-from pandas.tseries.tools import normalize_date
 
 from six import iteritems
 
@@ -39,6 +38,7 @@ from catalyst.patches.stats import (
 )
 import warnings
 from catalyst.constants import LOG_LEVEL
+from catalyst.utils.compat import normalize_date
 
 log = logbook.Logger('Risk Cumulative', level=LOG_LEVEL)
 

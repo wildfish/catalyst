@@ -21,7 +21,6 @@ import datetime
 from math import sqrt
 
 from nose_parameterized import parameterized
-from pandas.tslib import normalize_date
 import numpy as np
 import pandas as pd
 import pytz
@@ -51,6 +50,7 @@ from catalyst.testing.fixtures import (
     ZiplineTestCase,
 )
 from catalyst.utils.classproperty import classproperty
+from catalyst.utils.compat import normalize_date
 
 
 TestOrder = namedtuple('TestOrder', 'limit direction')

@@ -20,7 +20,6 @@ import numpy as np
 from numpy import float64, int64, nan
 import pandas as pd
 from pandas import isnull
-from pandas.tslib import normalize_date
 from six import iteritems
 from six.moves import reduce
 
@@ -55,6 +54,7 @@ from catalyst.data.history_loader import (
 )
 from catalyst.data.us_equity_pricing import NoDataOnDate
 
+from catalyst.utils.compat import normalize_date
 from catalyst.utils.math_utils import (
     nansum,
     nanmean,

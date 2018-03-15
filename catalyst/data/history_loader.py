@@ -21,7 +21,6 @@ from abc import (
 from numpy import concatenate
 from lru import LRU
 from pandas import isnull
-from pandas.tslib import normalize_date
 from toolz import sliding_window
 
 from six import with_metaclass
@@ -32,6 +31,7 @@ from catalyst.lib._int64window import AdjustedArrayWindow as Int64Window
 from catalyst.lib._float64window import AdjustedArrayWindow as Float64Window
 from catalyst.lib.adjustment import Float64Multiply, Float64Add
 from catalyst.utils.cache import ExpiringCache
+from catalyst.utils.compat import normalize_date
 from catalyst.utils.math_utils import number_of_decimal_places
 from catalyst.utils.memoize import lazyval
 from catalyst.utils.numpy_utils import float64_dtype

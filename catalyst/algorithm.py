@@ -21,7 +21,6 @@ import logbook
 import pytz
 import pandas as pd
 from contextlib2 import ExitStack
-from pandas.tseries.tools import normalize_date
 import numpy as np
 
 from itertools import chain, repeat
@@ -109,7 +108,7 @@ from catalyst.utils.numpy_utils import int64_dtype
 from catalyst.utils.calendars.trading_calendar import days_at_time
 from catalyst.utils.cache import CachedObject, Expired
 from catalyst.utils.calendars import get_calendar
-from catalyst.utils.compat import exc_clear
+from catalyst.utils.compat import exc_clear, normalize_date
 
 import catalyst.utils.events
 from catalyst.utils.events import (

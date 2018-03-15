@@ -21,9 +21,16 @@ else:
         pass
 
 
+try:
+    from pandas.core.tools.datetimes import normalize_date
+except ImportError:
+    from pandas.tslib import normalize_date
+
+
 unicode = type(u'')
 
 __all__ = [
     'mappingproxy',
     'unicode',
+    'normalize_date'
 ]

@@ -395,8 +395,8 @@ def handle_data(context, data):
 
             algocode = """
 from pandas import Timestamp
-from pandas.tseries.tools import normalize_date
 from catalyst.api import fetch_csv, record, sid, get_datetime
+from catalyst.utils.compat import normalize_date
 
 def initialize(context):
     fetch_csv(

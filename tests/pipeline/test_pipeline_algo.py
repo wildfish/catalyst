@@ -27,7 +27,6 @@ from pandas import (
     Series,
     Timestamp,
 )
-from pandas.tseries.tools import normalize_date
 from six import iteritems, itervalues
 
 from catalyst.algorithm import TradingAlgorithm
@@ -63,6 +62,7 @@ from catalyst.testing.fixtures import (
     ZiplineTestCase,
 )
 from catalyst.utils.calendars import get_calendar
+from catalyst.utils.compat import normalize_date
 
 TEST_RESOURCE_PATH = join(
     dirname(dirname(realpath(__file__))),  # catalyst_repo/tests
