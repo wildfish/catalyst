@@ -85,7 +85,7 @@ def check_entry(key, value):
 def get_treasury_rate(treasury_curves, treasury_duration, day):
     rate = None
 
-    curve = treasury_curves.ix[day]
+    curve = treasury_curves.loc[day]
     # 1month note data begins in 8/2001,
     # so we can use 3month instead.
     idx = TREASURY_DURATIONS.index(treasury_duration)
