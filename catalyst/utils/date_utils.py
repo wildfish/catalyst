@@ -43,7 +43,7 @@ def compute_date_range_chunks(sessions, start_date, end_date, chunksize):
 
 
 def safe_tz_localize(data, tz):
-    if data.tz is None:
+    if getattr(data, 'tz', None) is None:
         return data.tz_localize(tz)
     else:
         return data.tz_convert(tz)
